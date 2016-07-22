@@ -7,28 +7,21 @@ public class PlayerScript : MonoBehaviour
     /// 1 - The speed of the ship
     /// </summary>
 
-    public static PlayerScript S;
+
 
 
     public float RotateSpeed = 80f;
     public float MovementSpeed = 20f;
     public float ReverseMovementSpeed = 10f;
-
     public float boostCooldown = 1;
-
     private Rigidbody2D rigidbody;
 
-
-
-    void Awake()
-    {
-        S = this;
-    }
+    private Vector2 oldPosition;
 
     void Start() {
 
         rigidbody = GetComponent<Rigidbody2D>();
-
+        oldPosition = this.transform.position;
     }
 
 
@@ -42,13 +35,15 @@ public class PlayerScript : MonoBehaviour
 
             
             rigidbody.AddForce(transform.up * MovementSpeed);
-
-
-
-
+        
         if (Input.GetKey(KeyCode.DownArrow))
 
             Torque();
+        float distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
+        print("Speed: " + distancePerTime * 20);
+
+        oldPosition = this.transform.position;//This way I store my own position
+
 
     }
 
