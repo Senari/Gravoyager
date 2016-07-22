@@ -7,7 +7,10 @@ public class PlayerScript : MonoBehaviour
     /// 1 - The speed of the ship
     /// </summary>
 
+    public static PlayerScript S;
 
+    public float positionX;
+    public float positionY;
 
 
     public float RotateSpeed = 80f;
@@ -19,6 +22,8 @@ public class PlayerScript : MonoBehaviour
     private Vector2 oldPosition;
 
     void Start() {
+
+        S = this;
 
         rigidbody = GetComponent<Rigidbody2D>();
         oldPosition = this.transform.position;
@@ -43,6 +48,12 @@ public class PlayerScript : MonoBehaviour
         print("Speed: " + distancePerTime * 20);
 
         oldPosition = this.transform.position;//This way I store my own position
+
+
+        Vector3 playerpos = transform.position;
+
+        positionX = playerpos.x;
+        positionY = playerpos.y;
 
 
     }
