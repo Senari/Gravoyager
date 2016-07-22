@@ -7,7 +7,7 @@ public class PlayerScript : MonoBehaviour
     /// 1 - The speed of the ship
     /// </summary>
 
-
+    public static PlayerScript S;
 
 
     public float RotateSpeed = 80f;
@@ -17,6 +17,13 @@ public class PlayerScript : MonoBehaviour
     public float boostCooldown = 1;
 
     private Rigidbody2D rigidbody;
+
+
+
+    void Awake()
+    {
+        S = this;
+    }
 
     void Start() {
 
