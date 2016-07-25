@@ -4,10 +4,7 @@ using System.Collections;
 public class GravityScript : MonoBehaviour
 {
     public GameObject[] body;
-
-    // Use this for initialization
  
-        // Update is called once per frame
         void FixedUpdate()//Fixed = experimental
         {
         for (int i = 0; i < body.Length; i++)
@@ -17,10 +14,10 @@ public class GravityScript : MonoBehaviour
 
 
             float distance = Vector2.Distance(bodyPos, playerPos);//Function to find the distance. Vector2 because of 2D dimension.
-            print("Distance to the center ("+i+"): " + distance);
+            //print("Distance to the center ("+i+"): " + distance);
 
-
-            //float planetRadius = planet.transform.localScale;
+            //FOR ALTIMETER
+            //float planetRadius = body[i].transform.localScale;
             //float altitude = distance - planetRadius;
 
 
@@ -29,7 +26,7 @@ public class GravityScript : MonoBehaviour
 
 
             float weight = (bodyMass * playerMass) / (distance * distance);
-            print("Pulling force, kN: (" + i + ")" + weight);
+            //print("Pulling force, kN: (" + i + ")" + weight);
             Vector2 gravity = body[i].transform.position - this.transform.position;
             GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight)/*(1.0f - dist / maxGravDist) * maxGravity)*/;
 

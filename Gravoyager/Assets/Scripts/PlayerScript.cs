@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour
 {
+    /// <summary>
+    /// 1 - The speed of the ship
+    /// </summary>
 
     public static PlayerScript S;
 
@@ -18,9 +21,6 @@ public class PlayerScript : MonoBehaviour
 
     private Vector2 oldPosition;
 
-    public float fuel = 100f;
-    public float fuelConsumptionSpeed = 4f;
-
     void Start() {
 
         S = this;
@@ -32,37 +32,18 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Movement
         if (Input.GetKey(KeyCode.RightArrow))
             transform.Rotate(-Vector3.forward * RotateSpeed * Time.deltaTime);
         if (Input.GetKey(KeyCode.LeftArrow))
             transform.Rotate(Vector3.forward * RotateSpeed * Time.deltaTime);
         if (Input.GetKey(KeyCode.UpArrow))
-        {
 
-            if (FuelConsumption())
-            {
-
-                rigidbody.AddForce(transform.up * MovementSpeed);
-
-            }
-
-        }
             
-
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-
-            if (FuelConsumption())
-            {
-                Reverse();
-            }
-
-        }
-            
-
+            rigidbody.AddForce(transform.up * MovementSpeed);
         
+        if (Input.GetKey(KeyCode.DownArrow))
 
+            Torque();
         float distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
         print("Speed: " + distancePerTime * 20);
 
@@ -74,63 +55,12 @@ public class PlayerScript : MonoBehaviour
         positionX = playerpos.x;
         positionY = playerpos.y;
 
-        GameArea();
-        
-        
 
     }
 
-    void Reverse() {
+    void Torque() {
 
         rigidbody.AddForce((transform.up * -1) * ReverseMovementSpeed);
-
-
-    }
-
-    void GameArea() {
-
-
-        //Game area limitations
-        //There is a bit of an bug here, you can get "inside" of the restricted area and you have to "come back" to game are to get the ship moving again
-        //This can be tested by smashing into the wall and trying to get away from it, shit gets "stuck" inside the wall for as long as you "are in it"
-
-
-        //X axis
-        if (transform.position.x <= -400f)
-        {
-            transform.position = new Vector2(-400f, transform.position.y);
-        }
-        else if (transform.position.x >= 400f)
-        {
-            transform.position = new Vector2(400f, transform.position.y);
-        }
-        // Y axis
-        if (transform.position.y <= -200f)
-        {
-            transform.position = new Vector2(transform.position.x, -200f);
-        }
-        else if (transform.position.y >= 200f)
-        {
-            transform.position = new Vector2(transform.position.x, 200f);
-        }
-
-
-    }
-
-    public bool FuelConsumption() {
-
-        if (fuel > 0)
-        {
-            fuel = fuel - (fuelConsumptionSpeed * Time.deltaTime);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-           
-
-
 
 
     }
