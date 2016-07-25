@@ -17,7 +17,7 @@ public class GravityScript : MonoBehaviour
 
 
             float distance = Vector2.Distance(bodyPos, playerPos);//Function to find the distance. Vector2 because of 2D dimension.
-            print("Distance to the center ("+i+"): " + distance);
+            //print("Distance to the center ("+i+"): " + distance);
 
 
             //float planetRadius = planet.transform.localScale;
@@ -29,7 +29,7 @@ public class GravityScript : MonoBehaviour
 
 
             float weight = (bodyMass * playerMass) / (distance * distance);
-            print("Pulling force, kN: (" + i + ")" + weight);
+            //print("Pulling force, kN: (" + i + ")" + weight);
             Vector2 gravity = body[i].transform.position - this.transform.position;
             GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight)/*(1.0f - dist / maxGravDist) * maxGravity)*/;
 
