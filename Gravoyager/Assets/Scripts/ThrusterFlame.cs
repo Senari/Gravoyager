@@ -10,8 +10,8 @@ public class ThrusterFlame : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKey (KeyCode.UpArrow))
-			SpriteRenderer.sprite = "FlameDualBlue";
+			GetComponent<SpriteRenderer>().enabled = true;
 		else
-			SpriteRenderer.sprite = none;
+			GetComponent<SpriteRenderer>().enabled = false;
 	}
 }
