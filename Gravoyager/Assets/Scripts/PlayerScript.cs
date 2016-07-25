@@ -164,6 +164,12 @@ public class PlayerScript : MonoBehaviour
 
 
     }
+    public float ReturnFuel()
+    {
+
+        return fuel;
+
+    }
 
   
 
