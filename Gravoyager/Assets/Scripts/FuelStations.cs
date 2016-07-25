@@ -21,7 +21,7 @@ public class FuelStations : MonoBehaviour {
         if (collider.gameObject.tag == "Player")
         {
 
-            print("asd");
+            print("Fueling");
 
 
         }
