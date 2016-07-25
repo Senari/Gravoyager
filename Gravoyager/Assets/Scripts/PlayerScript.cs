@@ -21,6 +21,7 @@ public class PlayerScript : MonoBehaviour
 
     public float fuel = 100f;
     public float fuelConsumptionSpeed = 4f;
+    public float refuelingSpeed = 8f;
 
     public Slider FuelSlider;
 
@@ -68,7 +69,7 @@ public class PlayerScript : MonoBehaviour
         
 
         float distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
-        print("Speed: " + distancePerTime * 20);
+        //print("Speed: " + distancePerTime * 20);
 
         oldPosition = this.transform.position;//This way I store my own position
 
@@ -133,9 +134,33 @@ public class PlayerScript : MonoBehaviour
         {
             return false;
         }
-           
+
+    }
 
 
+    void OnCollisionStay2D(Collision2D collider)
+    {
+        if (collider.gameObject.tag == "FuelStations")
+        {
+
+            Refueling();
+
+        }
+
+
+    }
+
+
+    public void Refueling() {
+
+        if(fuel <= 100)
+        {
+
+            fuel = fuel + (refuelingSpeed * Time.deltaTime);
+
+        }
+
+        
 
 
     }

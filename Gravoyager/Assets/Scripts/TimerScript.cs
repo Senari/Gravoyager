@@ -20,7 +20,7 @@ public class TimerScript : MonoBehaviour {
 	void Update () {
       myCoolTimer -= Time.deltaTime;
         timerText.text = myCoolTimer.ToString("f0");
-        print(myCoolTimer);
+        //print(myCoolTimer);
 
 
 
