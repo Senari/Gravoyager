@@ -21,7 +21,7 @@ public class NextLevel : MonoBehaviour {
         if (collider.gameObject.tag == "Gates")
         {
 
-            Application.LoadLevel(3);
+            Application.LoadLevel(5);
 
         }
 

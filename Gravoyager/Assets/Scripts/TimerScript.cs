@@ -27,7 +27,7 @@ public class TimerScript : MonoBehaviour {
 
         if (myCoolTimer <= 0)
         {
-            Application.LoadLevel(3);
+            Application.LoadLevel(4);
 
         }
 
