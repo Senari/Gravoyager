@@ -3,9 +3,6 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour
 {
-    /// <summary>
-    /// 1 - The speed of the ship
-    /// </summary>
 
     public static PlayerScript S;
 
@@ -20,6 +17,9 @@ public class PlayerScript : MonoBehaviour
     private Rigidbody2D rigidbody;
 
     private Vector2 oldPosition;
+
+    public float fuel = 100f;
+    public float fuelConsumptionSpeed = 4f;
 
     void Start() {
 
@@ -38,9 +38,28 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow))
             transform.Rotate(Vector3.forward * RotateSpeed * Time.deltaTime);
         if (Input.GetKey(KeyCode.UpArrow))
-            rigidbody.AddForce(transform.up * MovementSpeed);
+        {
+
+            if (FuelConsumption())
+            {
+
+                rigidbody.AddForce(transform.up * MovementSpeed);
+
+            }
+
+        }
+            
+
         if (Input.GetKey(KeyCode.DownArrow))
-            Reverse();
+        {
+
+            if (FuelConsumption())
+            {
+                Reverse();
+            }
+
+        }
+            
 
         
 
@@ -55,6 +74,20 @@ public class PlayerScript : MonoBehaviour
         positionX = playerpos.x;
         positionY = playerpos.y;
 
+        GameArea();
+        
+        
+
+    }
+
+    void Reverse() {
+
+        rigidbody.AddForce((transform.up * -1) * ReverseMovementSpeed);
+
+
+    }
+
+    void GameArea() {
 
 
         //Game area limitations
@@ -81,11 +114,23 @@ public class PlayerScript : MonoBehaviour
             transform.position = new Vector2(transform.position.x, 200f);
         }
 
+
     }
 
-    void Reverse() {
+    public bool FuelConsumption() {
 
-        rigidbody.AddForce((transform.up * -1) * ReverseMovementSpeed);
+        if (fuel > 0)
+        {
+            fuel = fuel - (fuelConsumptionSpeed * Time.deltaTime);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+           
+
+
 
 
     }
