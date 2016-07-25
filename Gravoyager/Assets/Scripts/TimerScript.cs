@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class TimerScript : MonoBehaviour {
-    public float myCoolTimer = 99f;
+    public float myCoolTimer = 5f;
     public Text timerText;
 
 
@@ -12,11 +12,7 @@ public class TimerScript : MonoBehaviour {
         timerText = GetComponent<Text>();
 
         
-        if (myCoolTimer <= 0f)
-        {
-            Application.LoadLevel(3);
-            
-        }
+        
 
     }
 	
@@ -24,9 +20,19 @@ public class TimerScript : MonoBehaviour {
 	void Update () {
       myCoolTimer -= Time.deltaTime;
         timerText.text = myCoolTimer.ToString("f0");
-        //print(myCoolTimer);
+        print(myCoolTimer);
 
-      
+
+
+
+        if (myCoolTimer <= 0)
+        {
+            Application.LoadLevel(3);
+
+        }
+
+
+
 
     }
   
