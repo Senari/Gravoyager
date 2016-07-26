@@ -83,7 +83,7 @@ public class PlayerScript : MonoBehaviour
         positionX = playerpos.x;
         positionY = playerpos.y;
 
-        GameArea();
+        //GameArea();
 
         //Slider value
         FuelSlider.value = fuel;
