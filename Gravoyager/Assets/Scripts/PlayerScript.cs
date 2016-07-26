@@ -26,6 +26,7 @@ public class PlayerScript : MonoBehaviour
     public float fuel = 100f;
     public float fuelConsumptionSpeed = 4f;
     public float refuelingSpeed = 8f;
+    private float distancePerTime;//Player ship's speed
 
     public Slider FuelSlider;
 
@@ -51,9 +52,7 @@ public class PlayerScript : MonoBehaviour
 
             if (FuelConsumption())
             {
-
                 rigidbody.AddForce(transform.up * MovementSpeed);
-
             }
 
         }
@@ -72,8 +71,8 @@ public class PlayerScript : MonoBehaviour
 
         
 
-        float distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
-        //print("Speed: " + distancePerTime * 20);
+        distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
+        print("Absolute Speed: " + distancePerTime * 20);
 
         oldPosition = this.transform.position;//This way I store my own position
 
@@ -144,15 +143,24 @@ public class PlayerScript : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collider)
     {
+        //For collisions on speed
+        float speedCol = collider.gameObject.GetComponent<SpeedsOfObjects>().objectSpeed;//Object's speed
+        float relativeSpeed = speedCol - distancePerTime;//Impact speed
+        print("Speed: " + relativeSpeed);
+        if (relativeSpeed >= 2)
+            Destroy(gameObject);
+           // print("Dead");
+      
+            
+            //print("Speed: " + relatedSpeed * 20);
         if (collider.gameObject.tag == "FuelStations")
         {
-
             Refueling();
-
         }
 
-
     }
+
+    
 
 
     public void Refueling() {
