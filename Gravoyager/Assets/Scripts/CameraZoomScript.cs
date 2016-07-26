@@ -16,24 +16,27 @@ public class CameraZoomScript : MonoBehaviour {
 	void Update () {
 
 		float scroll = Input.GetAxis ("Mouse ScrollWheel");
-			if (scroll != 0.0f) {
+		if (scroll != 0.0f && targetOrtho <= maxOrtho) {
 				targetOrtho -= scroll * zoomSpeed;
 				targetOrtho = Mathf.Clamp (targetOrtho, minOrtho, maxOrtho);
+			print (targetOrtho);
 
 			//Here I'm trying to make different zooming speeds and steps to make it more comfortable 
 			//to observe ship/ landing space/ planet/ system with less scrolling and waiting. t.Alex
 
-			/*if (targetOrtho <= 9)
-				zoomSpeed = 10;
-				smoothSpeed = 10.0f;
+			/*if (targetOrtho <= 21)
+				zoomSpeed *= 2;
+				smoothSpeed *= 2;
 				minOrtho = 2;
+				maxOrtho = */
 
-			if (targetOrtho >= 10)
+			/*if (targetOrtho >= 10)
 				minOrtho = 8;
 				zoomSpeed = 80;
 				smoothSpeed = 80.0f;*/
 		}
 
 		Camera.main.orthographicSize = Mathf.MoveTowards (Camera.main.orthographicSize, targetOrtho, smoothSpeed * Time.deltaTime);
+
 	}
 }
