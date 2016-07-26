@@ -10,6 +10,10 @@ public class PlayerScript : MonoBehaviour
     public float positionX;
     public float positionY;
 
+    public float gameAreaX = 400f;
+    public float gameAreaY = 200f;
+
+
 
     public float RotateSpeed = 80f;
     public float MovementSpeed = 20f;
@@ -102,22 +106,22 @@ public class PlayerScript : MonoBehaviour
 
 
         //X axis
-        if (transform.position.x <= -400f)
+        if (transform.position.x <= -gameAreaX)
         {
-            transform.position = new Vector2(-400f, transform.position.y);
+            transform.position = new Vector2(-gameAreaX, transform.position.y);
         }
-        else if (transform.position.x >= 400f)
+        else if (transform.position.x >= gameAreaX)
         {
-            transform.position = new Vector2(400f, transform.position.y);
+            transform.position = new Vector2(gameAreaX, transform.position.y);
         }
         // Y axis
-        if (transform.position.y <= -200f)
+        if (transform.position.y <= -gameAreaY)
         {
-            transform.position = new Vector2(transform.position.x, -200f);
+            transform.position = new Vector2(transform.position.x, -gameAreaY);
         }
-        else if (transform.position.y >= 200f)
+        else if (transform.position.y >= gameAreaY)
         {
-            transform.position = new Vector2(transform.position.x, 200f);
+            transform.position = new Vector2(transform.position.x, gameAreaY);
         }
 
 
