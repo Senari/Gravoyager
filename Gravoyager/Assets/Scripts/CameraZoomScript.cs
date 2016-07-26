@@ -11,6 +11,8 @@ public class CameraZoomScript : MonoBehaviour {
 
 	void Start() {
 		targetOrtho = Camera.main.orthographicSize;
+		targetOrtho = 5;
+		smoothSpeed = 15;
 	}
 
 	void Update () {

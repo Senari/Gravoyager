@@ -13,8 +13,6 @@ public class PlayerScript : MonoBehaviour
     public float gameAreaX = 400f;
     public float gameAreaY = 200f;
 
-
-
     public float RotateSpeed = 80f;
     public float MovementSpeed = 20f;
     public float ReverseMovementSpeed = 10f;
@@ -23,22 +21,23 @@ public class PlayerScript : MonoBehaviour
 
     private Vector2 oldPosition;
 
-    public float fuel = 100f;
+	public float maxFuel = 100f;//Tank's capacity
+	private float currentFuel;//How much fuel at the moment
     public float fuelConsumptionSpeed = 4f;
     public float refuelingSpeed = 8f;
     private float distancePerTime;//Player ship's speed
+	public float crashOnSpeed;//Destroy the ship when crash speed is more than...
 
     public Slider FuelSlider;
 
-
-    void Start() {
-
+    void Start() 
+	{
         S = this;
 
         rigidbody = GetComponent<Rigidbody2D>();
         oldPosition = this.transform.position;
+		currentFuel = maxFuel;//Ship's tank is loaded full at start
     }
-
 
     void FixedUpdate()
     {
@@ -49,33 +48,24 @@ public class PlayerScript : MonoBehaviour
             transform.Rotate(Vector3.forward * RotateSpeed * Time.deltaTime);
         if (Input.GetKey(KeyCode.UpArrow))
         {
-
             if (FuelConsumption())
             {
                 rigidbody.AddForce(transform.up * MovementSpeed);
             }
-
-        }
-            
+        }            
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
-
             if (FuelConsumption())
             {
                 Reverse();
             }
-
-        }
-            
-
-        
+        }         
 
         distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
         print("Absolute Speed: " + distancePerTime * 20);
 
         oldPosition = this.transform.position;//This way I store my own position
-
 
         Vector3 playerpos = transform.position;
 
@@ -85,15 +75,12 @@ public class PlayerScript : MonoBehaviour
         //GameArea();
 
         //Slider value
-        FuelSlider.value = fuel;
-
+        FuelSlider.value = currentFuel;
     }
 
-    void Reverse() {
-
+    void Reverse() 
+	{
         rigidbody.AddForce((transform.up * -1) * ReverseMovementSpeed);
-
-
     }
 
     void GameArea() {
@@ -122,72 +109,42 @@ public class PlayerScript : MonoBehaviour
         {
             transform.position = new Vector2(transform.position.x, gameAreaY);
         }
-
-
     }
 
-    public bool FuelConsumption() {
-
-        if (fuel > 0)
+    public bool FuelConsumption() 
+	{
+        if (currentFuel > 0)
         {
-            fuel = fuel - (fuelConsumptionSpeed * Time.deltaTime);
+            currentFuel = currentFuel - (fuelConsumptionSpeed * Time.deltaTime);
             return true;
         }
         else
-        {
             return false;
-        }
-
     }
 
-
+	//Crash and refueling platforms
     void OnCollisionStay2D(Collision2D collider)
     {
         //For collisions on speed
         float speedCol = collider.gameObject.GetComponent<SpeedsOfObjects>().objectSpeed;//Object's speed
-        float relativeSpeed = speedCol - distancePerTime;//Impact speed
-        print("Speed: " + relativeSpeed);
-        if (relativeSpeed >= 2)
+        float relativeSpeed = speedCol * 20 - distancePerTime * 20;//Impact speed. Object's and ship's speeds have to be multiplied by 20 to get m/s format
+        print("Contact Speed was: " + relativeSpeed);
+
+		//Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
+		if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
             Destroy(gameObject);
-           // print("Dead");
-      
-            
-            //print("Speed: " + relatedSpeed * 20);
-        if (collider.gameObject.tag == "FuelStations")
-        {
-            Refueling();
-        }
+          
+		if (collider.gameObject.tag == "FuelStations")
+            Refueling();//If refueling does not work, check if platform has SpeedsOfObjects script attached
+    }  
 
-    }
-
-    
-
-
-    public void Refueling() {
-
-        if(fuel <= 100)
-        {
-
-            fuel = fuel + (refuelingSpeed * Time.deltaTime);
-
-        }
-
-        
-
-
+    public void Refueling() 
+	{
+        if(currentFuel <= maxFuel)//To avoid overfueling cheat
+            currentFuel = currentFuel + (refuelingSpeed * Time.deltaTime);
     }
     public float ReturnFuel()
     {
-
-        return fuel;
-
+		return currentFuel;
     }
-
-  
-
 }
-
-
-   
-   
-      

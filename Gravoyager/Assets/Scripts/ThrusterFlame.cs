@@ -1,28 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
-
-public class ThrusterFlame : MonoBehaviour {
+public class ThrusterFlame : MonoBehaviour 
+{	
 	public GameObject forwardFlame;
 	public GameObject reverseFlame;
-	// Use this for initialization
-	void Start () {
-	}
+	//private bool ifEnoughFuel = PlayerScript.FuelConsumption(); //I want to have an access to that method in PlayerScript class
 
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKey (KeyCode.UpArrow))
+	void Start () 
+	{
+		
+	}
+		
+	void FixedUpdate() 
+	{
+		//For main thruster
+		if (Input.GetKey (KeyCode.UpArrow)/* && ((ifEnoughFuel = true)*/) //And if THAT method in another class shows there is some fuel in tanks
 			forwardFlame.GetComponent<SpriteRenderer>().enabled = true;
 		else	
-		forwardFlame.GetComponent<SpriteRenderer>().enabled = false;
+			forwardFlame.GetComponent<SpriteRenderer>().enabled = false;
 
-		if (Input.GetKey (KeyCode.DownArrow))
+		//And for reverse thruster
+		if (Input.GetKey (KeyCode.DownArrow)/* && (ifEnoughFuel = true)*/)
 			reverseFlame.GetComponent<SpriteRenderer>().enabled = true;
-		else
-			
+		else			
 			reverseFlame.GetComponent<SpriteRenderer>().enabled = false;
-
-
 	}
 }

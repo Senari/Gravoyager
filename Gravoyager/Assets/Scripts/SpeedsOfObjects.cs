@@ -12,10 +12,9 @@ public class SpeedsOfObjects : MonoBehaviour
     }
 	
 	void FixedUpdate ()
-    {
-        
+    {        
         float distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
-        objectSpeed = distancePerTime * 20;
+        objectSpeed = distancePerTime;
         oldPosition = this.transform.position;
     }
 }
