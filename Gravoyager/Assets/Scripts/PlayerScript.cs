@@ -14,8 +14,8 @@ public class PlayerScript : MonoBehaviour
     public float gameAreaY = 200f;
 
     public float RotateSpeed = 80f;
-    public float MovementSpeed = 20f;
-    public float ReverseMovementSpeed = 10f;
+    public float MovementSpeed;
+    public float ReverseMovementSpeed;
     public float boostCooldown = 1;
     private Rigidbody2D rigidbody;
 
@@ -41,6 +41,8 @@ public class PlayerScript : MonoBehaviour
 
     void FixedUpdate()
     {
+		float consumptionForward = 1;//This one uses the same value as in fuelConsumptionSpeed for forward thrusters
+		float consumptionReverse = ReverseMovementSpeed / MovementSpeed;//There we get coefficient which is less (or more) to change ConsumptionSpeed for reverse thruster
         //Movement
         if (Input.GetKey(KeyCode.RightArrow))
             transform.Rotate(-Vector3.forward * RotateSpeed * Time.deltaTime);
@@ -48,7 +50,7 @@ public class PlayerScript : MonoBehaviour
             transform.Rotate(Vector3.forward * RotateSpeed * Time.deltaTime);
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            if (FuelConsumption())
+            if (FuelConsumption(consumptionForward))
             {
                 rigidbody.AddForce(transform.up * MovementSpeed);
             }
@@ -56,9 +58,9 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            if (FuelConsumption())
+            if (FuelConsumption(consumptionReverse))
             {
-                Reverse();
+			rigidbody.AddForce(transform.up * -ReverseMovementSpeed);
             }
         }         
 
@@ -76,11 +78,6 @@ public class PlayerScript : MonoBehaviour
 
         //Slider value
         FuelSlider.value = currentFuel;
-    }
-
-    void Reverse() 
-	{
-        rigidbody.AddForce((transform.up * -1) * ReverseMovementSpeed);
     }
 
     void GameArea() {
@@ -111,11 +108,11 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    public bool FuelConsumption() 
+	public bool FuelConsumption(float consumptionCoefficient) 
 	{
         if (currentFuel > 0)
         {
-            currentFuel = currentFuel - (fuelConsumptionSpeed * Time.deltaTime);
+            currentFuel = currentFuel - (fuelConsumptionSpeed * Time.deltaTime * consumptionCoefficient);
             return true;
         }
         else
@@ -132,9 +129,15 @@ public class PlayerScript : MonoBehaviour
 
 		//Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
 		if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
+        {
+
             Destroy(gameObject);
-          
-		if (collider.gameObject.tag == "FuelStations")
+            Destroyed();
+
+        }
+                       
+
+        if (collider.gameObject.tag == "FuelStations")
             Refueling();//If refueling does not work, check if platform has SpeedsOfObjects script attached
     }  
 
@@ -147,4 +150,11 @@ public class PlayerScript : MonoBehaviour
     {
 		return currentFuel;
     }
+
+    public void Destroyed() {
+
+        Application.LoadLevel(4);
+
+    }
+
 }

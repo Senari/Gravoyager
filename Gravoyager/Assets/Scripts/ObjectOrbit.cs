@@ -9,13 +9,13 @@ public class ObjectOrbit : MonoBehaviour {
     public float appliedForce = 1;
     
 	// Use this for initialization
-	void Start () {
-        print(appliedForce);
+	void Start () 
+	{
+		float factForce = appliedForce * 50;//second*second (m/s^2)
         float bodyMass = this.GetComponent<Rigidbody2D>().mass;
         rigidbody = this.GetComponent<Rigidbody2D>();
-        rigidbody.AddForce(transform.right * appliedForce);
+        rigidbody.AddForce(transform.right * factForce);
 
-        print("moving thing");
     }
 	
 	// Update is called once per frame
