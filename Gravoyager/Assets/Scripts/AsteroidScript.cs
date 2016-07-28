@@ -20,8 +20,8 @@ public class AsteroidScript : MonoBehaviour {
             float size = Random.Range(0.01f, 2);
             newAsteroid.transform.localScale = Vector3.one * size;
             // if the asteroid has a rigidbody...
-            newAsteroid.GetComponent<Rigidbody2D>().velocity = Random.insideUnitSphere * movementSpeed;
-            // newAsteroid.GetComponent<Rigidbody2D>().angularVelocity = Random.insideUnitSphere * rotationSpeed;
+            newAsteroid.GetComponent<Rigidbody>().velocity = Random.insideUnitSphere * movementSpeed;
+             newAsteroid.GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * rotationSpeed;
         }
     }
 	
