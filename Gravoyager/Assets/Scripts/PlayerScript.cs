@@ -185,9 +185,9 @@ public class PlayerScript : MonoBehaviour
 
     //Trajectory prediction
     public void Trajectory()
-    {
+    {	
         Vector2 pos1 = oldPosition;
-        Vector2 pos2 = this.transform.position;
+		Vector2 pos2 = this.transform.position;
             for (int d = 0; d < trajectoryDots; d++)
             {
                 GameObject futurePlayer = Instantiate(dot); // New game object for future me
@@ -198,7 +198,7 @@ public class PlayerScript : MonoBehaviour
                 for (int i = 0; i < body.Length; i++)
                 {
                     // exclude yourself
-                    if (body[i] != gameObject)
+				if (/*(body[i] != futurePlayer) &&*/ (body[i] != futurePlayer)  && (body[i] != gameObject))
                     {
                         Vector2 bodyPos = body[i].transform.position;//Creating an objects to work with Player and Planet
                         Vector2 playerPos = futurePlayer.transform.position; //"This" because script is applied to player
@@ -213,10 +213,11 @@ public class PlayerScript : MonoBehaviour
                         Vector2 gravity = body[i].transform.position - futurePlayer.transform.position;
                         futurePlayer.GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight);
                     }
-                }
-
+                }				
                 pos1 = this.transform.position;
                 pos2 = futurePlayer.transform.position;
+				Destroy(futurePlayer.gameObject, 0.02f);
+
             }            
        }//Trajectory prediction
 }
