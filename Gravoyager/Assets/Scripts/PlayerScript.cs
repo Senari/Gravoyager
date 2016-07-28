@@ -72,7 +72,7 @@ public class PlayerScript : MonoBehaviour
         }         
 
         distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
-        print("Absolute Speed: " + distancePerTime * 20);
+        //print("Absolute Speed: " + distancePerTime * 20);
 
         oldPosition = this.transform.position;//This way I store my own position
 
@@ -134,7 +134,7 @@ public class PlayerScript : MonoBehaviour
         //For collisions on speed
         float speedCol = collider.gameObject.GetComponent<SpeedsOfObjects>().objectSpeed;//Object's speed
         float relativeSpeed = speedCol * 20 - distancePerTime * 20;//Impact speed. Object's and ship's speeds have to be multiplied by 20 to get m/s format
-        print("Contact Speed was: " + relativeSpeed);
+        //print("Contact Speed was: " + relativeSpeed);
 
 		//Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
 		if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
