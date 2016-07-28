@@ -22,34 +22,41 @@ public class PlayerScript : MonoBehaviour
     private Vector2 oldPosition;
 
     //Fuel
-	public float maxFuel = 500f;//Tank's capacity
-	private float currentFuel;//How much fuel at the moment
+    public float maxFuel = 500f;//Tank's capacity
+    private float currentFuel;//How much fuel at the moment
     public float fuelConsumptionSpeed = 4f;
     public float refuelingSpeed = 8f;
 
     //Cargo
     public float maxCargo;
-    public float currentCargo;    
+    public float currentCargo;
 
     //Speed
     private float distancePerTime;//Player ship's speed
-	public float crashOnSpeed;//Destroy the ship when crash speed is more than...
+    public float crashOnSpeed;//Destroy the ship when crash speed is more than...
+
+    //trajectory
+    public int trajectoryDots;
+    private float dotSpread;
+    public GameObject dot;
 
     public Slider FuelSlider;
 
-    void Start() 
-	{
+    void Start()
+    {
         S = this;
 
         rigidbody = GetComponent<Rigidbody2D>();
         oldPosition = this.transform.position;
-		currentFuel = maxFuel;//Ship's tank is loaded full at start
+        currentFuel = maxFuel;//Ship's tank is loaded full at start
+        currentCargo = 0;
     }
 
     void FixedUpdate()
     {
-		float consumptionForward = 1;//This one uses the same value as in fuelConsumptionSpeed for forward thrusters
-		float consumptionReverse = ReverseMovementSpeed / MovementSpeed;//There we get coefficient which is less (or more) to change ConsumptionSpeed for reverse thruster
+        float consumptionForward = 1;//This one uses the same value as in fuelConsumptionSpeed for forward thrusters
+        float consumptionReverse = ReverseMovementSpeed / MovementSpeed;//There we get coefficient which is less (or more) to change ConsumptionSpeed for reverse thruster
+        
         //Movement
         if (Input.GetKey(KeyCode.RightArrow))
             transform.Rotate(-Vector3.forward * RotateSpeed * Time.deltaTime);
@@ -61,18 +68,24 @@ public class PlayerScript : MonoBehaviour
             {
                 rigidbody.AddForce(transform.up * MovementSpeed);
             }
-        }            
+        }
 
         if (Input.GetKey(KeyCode.DownArrow))
         {
             if (FuelConsumption(consumptionReverse))
             {
-			rigidbody.AddForce(transform.up * -ReverseMovementSpeed);
+                rigidbody.AddForce(transform.up * -ReverseMovementSpeed);
             }
-        }         
+        }
+        Vector2 myPosition = this.transform.position;
+        distancePerTime = Vector2.Distance(oldPosition, myPosition);
+        print("Absolute Speed: " + distancePerTime * 50);       
 
-        distancePerTime = Vector2.Distance(oldPosition, this.transform.position);
-        //print("Absolute Speed: " + distancePerTime * 20);
+        //Trajectory
+        if ((oldPosition != myPosition) && (trajectoryDots >= 1))
+        {
+            Trajectory();//Calling for method
+        }
 
         oldPosition = this.transform.position;//This way I store my own position
 
@@ -81,15 +94,18 @@ public class PlayerScript : MonoBehaviour
         positionX = playerpos.x;
         positionY = playerpos.y;
 
-        rigidbody.mass = 0.500f + currentFuel * 0.001f; //Vessel mass + fuel mass
+        //Dynamic mass
+        rigidbody.mass = 0.500f + currentFuel * 0.001f + currentCargo * 0.001f; //Vessel mass + fuel mass + cargo mass
 
         //GameArea();
 
         //Slider value
         FuelSlider.value = currentFuel;
+        
     }
 
-    void GameArea() {
+    void GameArea()
+    {
 
 
         //Game area limitations
@@ -117,8 +133,8 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-	public bool FuelConsumption(float consumptionCoefficient) 
-	{
+    public bool FuelConsumption(float consumptionCoefficient)
+    {
         if (currentFuel > 0)
         {
             currentFuel = currentFuel - (fuelConsumptionSpeed * Time.deltaTime * consumptionCoefficient);
@@ -128,42 +144,79 @@ public class PlayerScript : MonoBehaviour
             return false;
     }
 
-	//Crash and refueling platforms
+    //Crash and refueling platforms
     void OnCollisionStay2D(Collision2D collider)
     {
         //For collisions on speed
         float speedCol = collider.gameObject.GetComponent<SpeedsOfObjects>().objectSpeed;//Object's speed
-        float relativeSpeed = speedCol * 20 - distancePerTime * 20;//Impact speed. Object's and ship's speeds have to be multiplied by 20 to get m/s format
-        //print("Contact Speed was: " + relativeSpeed);
+        float relativeSpeed = speedCol * 50 - distancePerTime * 50;//Impact speed. Object's and ship's speeds have to be multiplied by 20 to get m/s format
+        print("Contact Speed was: " + relativeSpeed);
 
-		//Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
-		if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
+        //Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
+        if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
         {
 
             Destroy(gameObject);
             Destroyed();
 
         }
-                       
+
 
         if (collider.gameObject.tag == "FuelStations")
             Refueling();//If refueling does not work, check if platform has SpeedsOfObjects script attached
-    }  
+    }
 
-    public void Refueling() 
-	{
-        if(currentFuel <= maxFuel)//To avoid overfueling cheat
+    public void Refueling()
+    {
+        if (currentFuel <= maxFuel)//To avoid overfueling cheat
             currentFuel = currentFuel + (refuelingSpeed * Time.deltaTime);
     }
     public float ReturnFuel()
     {
-		return currentFuel;
+        return currentFuel;
     }
 
-    public void Destroyed() {
+    public void Destroyed()
+    {
 
         Application.LoadLevel(4);
 
     }
 
+    //Trajectory prediction
+    public void Trajectory()
+    {
+        Vector2 pos1 = oldPosition;
+        Vector2 pos2 = this.transform.position;
+            for (int d = 0; d < trajectoryDots; d++)
+            {
+                GameObject futurePlayer = Instantiate(dot); // New game object for future me
+                futurePlayer.transform.position = pos2 +(pos2 - pos1); //Location of future me
+
+                //Gravity to attention
+                GameObject[] body = GameObject.FindGameObjectsWithTag("Massed");
+                for (int i = 0; i < body.Length; i++)
+                {
+                    // exclude yourself
+                    if (body[i] != gameObject)
+                    {
+                        Vector2 bodyPos = body[i].transform.position;//Creating an objects to work with Player and Planet
+                        Vector2 playerPos = futurePlayer.transform.position; //"This" because script is applied to player
+
+                        float distance = Vector2.Distance(bodyPos, playerPos);//Function to find the distance. Vector2 because of 2D dimension.
+
+                        float playerMass = futurePlayer.GetComponent<Rigidbody2D>().mass;//Taking mass from Rigidbody
+                        float bodyMass = body[i].GetComponent<Rigidbody2D>().mass;
+
+
+                        float weight = (bodyMass * playerMass) / (distance * distance);
+                        Vector2 gravity = body[i].transform.position - futurePlayer.transform.position;
+                        futurePlayer.GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight);
+                    }
+                }
+
+                pos1 = this.transform.position;
+                pos2 = futurePlayer.transform.position;
+            }            
+       }//Trajectory prediction
 }
