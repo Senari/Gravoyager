@@ -21,10 +21,17 @@ public class PlayerScript : MonoBehaviour
 
     private Vector2 oldPosition;
 
-	public float maxFuel = 100f;//Tank's capacity
+    //Fuel
+	public float maxFuel = 500f;//Tank's capacity
 	private float currentFuel;//How much fuel at the moment
     public float fuelConsumptionSpeed = 4f;
     public float refuelingSpeed = 8f;
+
+    //Cargo
+    public float maxCargo;
+    public float currentCargo;    
+
+    //Speed
     private float distancePerTime;//Player ship's speed
 	public float crashOnSpeed;//Destroy the ship when crash speed is more than...
 
@@ -73,6 +80,8 @@ public class PlayerScript : MonoBehaviour
 
         positionX = playerpos.x;
         positionY = playerpos.y;
+
+        rigidbody.mass = 0.500f + currentFuel * 0.001f; //Vessel mass + fuel mass
 
         //GameArea();
 
