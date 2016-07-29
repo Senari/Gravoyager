@@ -214,7 +214,7 @@ public class PlayerScript : MonoBehaviour
                         futurePlayer.GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight);
                     }
                 }
-
+                Destroy(futurePlayer.gameObject, 0.02f);
                 pos1 = this.transform.position;
                 pos2 = futurePlayer.transform.position;
             }            
