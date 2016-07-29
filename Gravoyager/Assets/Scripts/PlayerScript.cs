@@ -19,6 +19,9 @@ public class PlayerScript : MonoBehaviour
     public float boostCooldown = 1;
     private Rigidbody2D rigidbody;
 
+    //SpeedMeter
+    public Text speedMeter;
+
     private Vector2 oldPosition;
 
     //Fuel
@@ -36,7 +39,7 @@ public class PlayerScript : MonoBehaviour
     public float crashOnSpeed;//Destroy the ship when crash speed is more than...
 
     //trajectory
-    public int trajectoryDots;
+    public int trajectoryDots = 0;
     private float dotSpread;
     public GameObject dot;
 
@@ -50,6 +53,7 @@ public class PlayerScript : MonoBehaviour
         oldPosition = this.transform.position;
         currentFuel = maxFuel;//Ship's tank is loaded full at start
         currentCargo = 0;
+        speedMeter.text = "0";
     }
 
     void FixedUpdate()
@@ -79,7 +83,11 @@ public class PlayerScript : MonoBehaviour
         }
         Vector2 myPosition = this.transform.position;
         distancePerTime = Vector2.Distance(oldPosition, myPosition);
-        print("Absolute Speed: " + distancePerTime * 50);       
+        float absoluteSpeed = distancePerTime * 50;
+        if (speedMeter != null)
+        {
+            speedMeter.text = absoluteSpeed.ToString("F2");     //quotes for string
+        }
 
         //Trajectory
         if ((oldPosition != myPosition) && (trajectoryDots >= 1))
@@ -214,7 +222,7 @@ public class PlayerScript : MonoBehaviour
                         futurePlayer.GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight);
                     }
                 }
-                Destroy(futurePlayer.gameObject, 0.02f);
+                //Destroy(futurePlayer.gameObject, 0.02f);
                 pos1 = this.transform.position;
                 pos2 = futurePlayer.transform.position;
             }            
