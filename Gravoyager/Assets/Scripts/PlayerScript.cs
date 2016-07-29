@@ -191,7 +191,7 @@ public class PlayerScript : MonoBehaviour
             for (int d = 0; d < trajectoryDots; d++)
             {
                 GameObject futurePlayer = Instantiate(dot); // New game object for future me
-                futurePlayer.transform.position = pos2 +(pos2 - pos1); //Location of future me
+                futurePlayer.transform.position = pos2 +(pos2-pos1); //Location of future me
 
                 //Gravity to attention
                 GameObject[] body = GameObject.FindGameObjectsWithTag("Massed");
