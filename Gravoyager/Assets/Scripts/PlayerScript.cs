@@ -45,7 +45,15 @@ public class PlayerScript : MonoBehaviour
 
     public Slider FuelSlider;
 
-    void Start()
+	//Death effects
+	private Animator explosion;
+	public AudioClip explosionSound;
+	public AudioSource explosionSource;
+	[HideInInspector]
+	public bool Alive = true;
+
+
+	void Start()
     {
         S = this;
 
@@ -54,34 +62,42 @@ public class PlayerScript : MonoBehaviour
         currentFuel = maxFuel;//Ship's tank is loaded full at start
         currentCargo = 0;
         speedMeter.text = "0";
+
+		explosion = GetComponent<Animator> (); // Player death animation
+		explosionSound = GetComponent<AudioClip>();
     }
 
     void FixedUpdate()
     {
         float consumptionForward = 1;//This one uses the same value as in fuelConsumptionSpeed for forward thrusters
         float consumptionReverse = ReverseMovementSpeed / MovementSpeed;//There we get coefficient which is less (or more) to change ConsumptionSpeed for reverse thruster
-        
-        //Movement
-        if (Input.GetKey(KeyCode.RightArrow))
-            transform.Rotate(-Vector3.forward * RotateSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.LeftArrow))
-            transform.Rotate(Vector3.forward * RotateSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            if (FuelConsumption(consumptionForward))
-            {
-                rigidbody.AddForce(transform.up * MovementSpeed);
-            }
-        }
 
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            if (FuelConsumption(consumptionReverse))
-            {
-                rigidbody.AddForce(transform.up * -ReverseMovementSpeed);
-            }
-        }
-        Vector2 myPosition = this.transform.position;
+
+		if (Alive)
+		{
+			//Movement
+			if (Input.GetKey(KeyCode.RightArrow))
+				transform.Rotate(-Vector3.forward * RotateSpeed * Time.deltaTime);
+			if (Input.GetKey(KeyCode.LeftArrow))
+				transform.Rotate(Vector3.forward * RotateSpeed * Time.deltaTime);
+			if (Input.GetKey(KeyCode.UpArrow))
+			{
+				if (FuelConsumption(consumptionForward))
+				{
+					rigidbody.AddForce(transform.up * MovementSpeed);
+				}
+			}
+
+			if (Input.GetKey(KeyCode.DownArrow))
+			{
+				if (FuelConsumption(consumptionReverse))
+				{
+					rigidbody.AddForce(transform.up * -ReverseMovementSpeed);
+				}
+			}
+		}
+
+		Vector2 myPosition = this.transform.position;
         distancePerTime = Vector2.Distance(oldPosition, myPosition);
         float absoluteSpeed = distancePerTime * 50;
         if (speedMeter != null)
@@ -163,9 +179,8 @@ public class PlayerScript : MonoBehaviour
         //Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
         if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
         {
-
-            Destroy(gameObject);
-            Destroyed();
+			
+			Destroyed();
 
         }
 
@@ -186,9 +201,15 @@ public class PlayerScript : MonoBehaviour
 
     public void Destroyed()
     {
-
-        Application.LoadLevel(4);
-
+		{			
+			// Plays the explosion animation, freezes player movement, and causes the restart screen to load after a delay.
+			//Destroy(gameObject);
+			Alive = false;
+			explosion.enabled = true;
+			rigidbody.constraints = RigidbodyConstraints2D.FreezeAll; 
+			Invoke ("Restart", 1.7f);
+			explosionSource.enabled = true;
+		}
     }
 
     //Trajectory prediction
@@ -227,4 +248,9 @@ public class PlayerScript : MonoBehaviour
                 pos2 = futurePlayer.transform.position;
             }            
        }//Trajectory prediction
+
+	public void Restart()
+	{
+		Application.LoadLevel (4);
+	}
 }
