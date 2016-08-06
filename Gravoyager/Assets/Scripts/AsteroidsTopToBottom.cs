@@ -15,15 +15,18 @@ public class AsteroidsTopToBottom : MonoBehaviour {
 	int laskuri = 0;
 
 	public int height = 340;
-
-
-	// Use this for initialization
-	void Start () {
-
+    public int amount = 500;
+    public int startPoint = 170;
 
 
 
-		for (int i = 0; i < 500; ++i)
+    // Use this for initialization
+    void Start () {
+
+
+
+
+		for (int i = 0; i < amount; ++i)
 		{
 			if (laskuri >= height) {
 
@@ -32,7 +35,7 @@ public class AsteroidsTopToBottom : MonoBehaviour {
 			}
 
 
-			GameObject newAsteroid = (GameObject)Instantiate(asteroidPrefab, new Vector3( SpawnPoint.transform.position.x, laskuri + (SpawnPoint.transform.position.y - 170), 0), Quaternion.identity);
+			GameObject newAsteroid = (GameObject)Instantiate(asteroidPrefab, new Vector3( SpawnPoint.transform.position.x, laskuri + (SpawnPoint.transform.position.y - startPoint), 0), Quaternion.identity);
 			float size = Random.Range(0.01f, 2);
 			newAsteroid.transform.localScale = Vector3.one * size;
 			// if the asteroid has a rigidbody...

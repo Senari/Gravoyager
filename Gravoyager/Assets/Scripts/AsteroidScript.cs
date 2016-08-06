@@ -15,6 +15,8 @@ public class AsteroidScript : MonoBehaviour {
 	int laskuri = 0;
 
 	public int length = 340;
+    public int amount = 500;
+    public int startPoint = 170;
 
 
     // Use this for initialization
@@ -23,7 +25,7 @@ public class AsteroidScript : MonoBehaviour {
 	
 
 
-        for (int i = 0; i < 500; ++i)
+        for (int i = 0; i < amount; ++i)
         {
 			if (laskuri >= length) {
 
@@ -32,7 +34,7 @@ public class AsteroidScript : MonoBehaviour {
 			}
 
 
-			GameObject newAsteroid = (GameObject)Instantiate(asteroidPrefab, new Vector3(laskuri + (SpawnPoint.transform.position.x - 170), SpawnPoint.transform.position.y, 0), Quaternion.identity);
+			GameObject newAsteroid = (GameObject)Instantiate(asteroidPrefab, new Vector3(laskuri + (SpawnPoint.transform.position.x - startPoint), SpawnPoint.transform.position.y, 0), Quaternion.identity);
             float size = Random.Range(0.01f, 2);
             newAsteroid.transform.localScale = Vector3.one * size;
             // if the asteroid has a rigidbody...
