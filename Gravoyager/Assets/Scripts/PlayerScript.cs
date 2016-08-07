@@ -22,8 +22,6 @@ public class PlayerScript : MonoBehaviour
     //SpeedMeter
     public Text speedMeter;
 
-    private Vector2 oldPosition;
-
     //Fuel
     public float maxFuel = 500f;//Tank's capacity
     private float currentFuel;//How much fuel at the moment
@@ -33,17 +31,21 @@ public class PlayerScript : MonoBehaviour
     //Cargo
     public float maxCargo;
     public float currentCargo;
+	public float miningSpeed = 5f;
 
     //Speed
     private float distancePerTime;//Player ship's speed
     public float crashOnSpeed;//Destroy the ship when crash speed is more than...
+	private Vector2 oldPosition;
+	private Vector2 velocityVector;
 
     //trajectory
-    public int trajectoryDots = 0;
-    private float dotSpread;
-    public GameObject dot;
-
-    public Slider FuelSlider;
+	public int trajectoryDots = 0;
+	private float dotSpread;
+	public GameObject dot;
+	private GameObject[] futurePlayer;
+    
+	public Slider FuelSlider;
 
 	//Death effects
 	private Animator explosion;
@@ -100,9 +102,10 @@ public class PlayerScript : MonoBehaviour
 		Vector2 myPosition = this.transform.position;
         distancePerTime = Vector2.Distance(oldPosition, myPosition);
         float absoluteSpeed = distancePerTime * 50;
-        if (speedMeter != null)
+        
+		if (speedMeter != null)
         {
-            speedMeter.text = absoluteSpeed.ToString("F2");     //quotes for string
+            speedMeter.text = absoluteSpeed.ToString("F2");//quotes for string
         }
 
         //Trajectory
@@ -178,15 +181,14 @@ public class PlayerScript : MonoBehaviour
 
         //Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
         if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
-        {
-			
+        {			
 			Destroyed();
-
         }
-
 
         if (collider.gameObject.tag == "FuelStations")
             Refueling();//If refueling does not work, check if platform has SpeedsOfObjects script attached
+		//if (collider.gameObject.name == "Planet")
+		//LoadingCargo ();//
     }
 
     public void Refueling()
@@ -198,6 +200,15 @@ public class PlayerScript : MonoBehaviour
     {
         return currentFuel;
     }
+	public void LoadingCargo()
+	{
+		if ((Input.GetKeyDown (KeyCode.C)) && (currentCargo <= maxCargo))
+			currentCargo += (miningSpeed * Time.deltaTime);
+	}
+	public float ReturnCargo()
+	{
+		return currentCargo;
+	}
 
     public void Destroyed()
     {
@@ -215,12 +226,15 @@ public class PlayerScript : MonoBehaviour
     //Trajectory prediction
     public void Trajectory()
     {
-        Vector2 pos1 = oldPosition;
-        Vector2 pos2 = this.transform.position;
+		Vector2 pos1 = this.transform.position;
+		Vector2 pos2 = new Vector2();
+		Vector2 gravity = new Vector2();
+		Vector2 mov = new Vector2();
+		float weight;
+		float gAcceleration;
             for (int d = 0; d < trajectoryDots; d++)
             {
-                GameObject futurePlayer = Instantiate(dot); // New game object for future me
-                futurePlayer.transform.position = pos2 +(pos2-pos1); //Location of future me
+			GameObject futurePlayer = Instantiate(dot); // New game object for future me
 
                 //Gravity to attention
                 GameObject[] body = GameObject.FindGameObjectsWithTag("Massed");
@@ -229,23 +243,26 @@ public class PlayerScript : MonoBehaviour
                     // exclude yourself
                     if (body[i] != gameObject)
                     {
-                        Vector2 bodyPos = body[i].transform.position;//Creating an objects to work with Player and Planet
-                        Vector2 playerPos = futurePlayer.transform.position; //"This" because script is applied to player
+					Vector2 bodyPos = body[i].transform.position;//Creating an objects to work with Player and Planet
+					Vector2 playerPos = /*futurePlayer*/this.transform.position; //"This" because script is applied to player
 
-                        float distance = Vector2.Distance(bodyPos, playerPos);//Function to find the distance. Vector2 because of 2D dimension.
+					float distance = Vector2.Distance(bodyPos, playerPos);//Function to find the distance. Vector2 because of 2D dimension.
 
-                        float playerMass = futurePlayer.GetComponent<Rigidbody2D>().mass;//Taking mass from Rigidbody
-                        float bodyMass = body[i].GetComponent<Rigidbody2D>().mass;
+					float playerMass = futurePlayer.GetComponent<Rigidbody2D>().mass;//Taking mass from Rigidbody
+					float bodyMass = body[i].GetComponent<Rigidbody2D>().mass;
 
 
-                        float weight = (bodyMass * playerMass) / (distance * distance);
-                        Vector2 gravity = body[i].transform.position - futurePlayer.transform.position;
-                        futurePlayer.GetComponent<Rigidbody2D>().AddForce(gravity.normalized * weight);
+					weight = (bodyMass * playerMass) / (distance * distance);
+					gAcceleration = weight / playerMass; 
+					gravity = body[i].transform.position - /*futurePlayer*/this.transform.position;
+					mov = new Vector2(gravity.normalized.x * (gAcceleration/bodyMass) + velocityVector.normalized.x * distancePerTime, gravity.normalized.y * (gAcceleration/bodyMass) + velocityVector.normalized.y * distancePerTime);
+					futurePlayer.transform.position = pos2;
+					pos2 = pos1 - mov;
                     }
-                }
-                //Destroy(futurePlayer.gameObject, 0.02f);
-                pos1 = this.transform.position;
-                pos2 = futurePlayer.transform.position;
+                }                
+				pos1 = pos2;
+				Destroy(futurePlayer.gameObject, 0.02f);
+                
             }            
        }//Trajectory prediction
 
