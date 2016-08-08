@@ -17,7 +17,6 @@ public class ShowAPointer : MonoBehaviour
 		{
 			//pointerPrefab.SetActive(false);//By default all pointers ar switched off
 			showPointer = false;
-			print ("Arrow off");
 		}
 	}
 	
@@ -27,13 +26,10 @@ public class ShowAPointer : MonoBehaviour
 		if (showPointer == true) 
 		{
 			pointerPrefab.SetActive (true);
-
 		}
 		else if (showPointer == false) 
 		{
 			pointerPrefab.SetActive (false);
-			//print ("Arrow Inactive!");
-
 		}
 	}
 	void OnCollisionEnter2D(Collision2D collider)//When Player lands the platform
@@ -44,10 +40,8 @@ public class ShowAPointer : MonoBehaviour
 		}
 	}
 	void Contact()
-	{
-		print ("Contact!");
-		showPointer = true;//Pointer is shown until next platform
-		print ("Arrow works");
+	{				
+		showPointer = true;//Pointer is shown (until next platform - is purpose)
 	}
 
 }
