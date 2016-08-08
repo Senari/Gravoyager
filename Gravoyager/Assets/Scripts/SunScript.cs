@@ -45,7 +45,7 @@ public class SunScript : MonoBehaviour {
         if (collider.gameObject.tag == "Player")
         {
 
-
+            timeCloseToSun = 0;
             closeToSun = false;
 
 
