@@ -3,15 +3,25 @@ using System.Collections;
 
 public class SunScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	    
+    public bool closeToSun = false;
+    public float timeCloseToSun = 0;
+    public float maxTimeCloseToSun = 5;
 
+    public static PlayerScript S;
+
+    void Update () {
+
+        if (timeCloseToSun >= maxTimeCloseToSun) {
+
+            PlayerScript.S.Destroyed();
+
+        }
+
+        if (closeToSun == true) {
+
+            timeCloseToSun = timeCloseToSun + Time.deltaTime;
+
+        }
 
 
 
@@ -23,7 +33,20 @@ public class SunScript : MonoBehaviour {
         {
 
 
-            Destroy(collider.gameObject);
+            closeToSun = true;
+
+
+        }
+
+
+    }
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "Player")
+        {
+
+            timeCloseToSun = 0;
+            closeToSun = false;
 
 
         }
