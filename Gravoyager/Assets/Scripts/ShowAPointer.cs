@@ -8,6 +8,7 @@ using System.Collections;
 public class ShowAPointer : MonoBehaviour 
 {
 	public GameObject pointerPrefab;//Prafab with Arrow or another pointer
+	private bool showPointer = false;
 
 	// Use this for initialization
 	void Start () 
@@ -15,22 +16,38 @@ public class ShowAPointer : MonoBehaviour
 		if (pointerPrefab != null)//Works if anything is set as Pointer
 		{
 			//pointerPrefab.SetActive(false);//By default all pointers ar switched off
+			showPointer = false;
 			print ("Arrow off");
 		}
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void FixedUpdate () 
 	{
-	
-	}
-	void onCollisionStay2D(Collision2D collider)//When Player lands the platform
-	{
-		if (collider.gameObject.tag == "Player") //if Player lands this platform
+		if (showPointer == true) 
 		{
-			pointerPrefab.SetActive(true);//Pointer is shown until next platform
-			print ("Arrow works");
+			pointerPrefab.SetActive (true);
+
 		}
+		else if (showPointer == false) 
+		{
+			pointerPrefab.SetActive (false);
+			//print ("Arrow Inactive!");
+
+		}
+	}
+	void OnCollisionEnter2D(Collision2D collider)//When Player lands the platform
+	{
+		if (collider.gameObject.GetComponent<PolygonCollider2D>().tag == "Player") //if Player lands this platform
+		{
+			Contact ();
+		}
+	}
+	void Contact()
+	{
+		print ("Contact!");
+		showPointer = true;//Pointer is shown until next platform
+		print ("Arrow works");
 	}
 
 }

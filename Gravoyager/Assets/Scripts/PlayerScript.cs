@@ -175,9 +175,14 @@ public class PlayerScript : MonoBehaviour
     void OnCollisionStay2D(Collision2D collider)
     {
         //For collisions on speed
+		if (collider.gameObject.tag == "FuelStations")
+		{
+			Refueling();//If refueling does not work, check if platform has SpeedsOfObjects script attached
+		}
+
         float speedCol = collider.gameObject.GetComponent<SpeedsOfObjects>().objectSpeed;//Object's speed
         float relativeSpeed = speedCol * 50 - distancePerTime * 50;//Impact speed. Object's and ship's speeds have to be multiplied by 20 to get m/s format
-        print("Contact Speed was: " + relativeSpeed);
+        //print("Contact Speed was: " + relativeSpeed);
 
         //Relative speed is a difference of ship's and object's speed. It can be negative, that's why we also use OR state
         if ((relativeSpeed >= crashOnSpeed) || (relativeSpeed <= -crashOnSpeed))
@@ -185,8 +190,7 @@ public class PlayerScript : MonoBehaviour
 			Destroyed();
         }
 
-        if (collider.gameObject.tag == "FuelStations")
-            Refueling();//If refueling does not work, check if platform has SpeedsOfObjects script attached
+     
 		//if (collider.gameObject.name == "Planet")
 		//LoadingCargo ();//
     }
