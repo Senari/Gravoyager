@@ -7,10 +7,9 @@ using System.Collections;
 
 public class ShowAPointer : MonoBehaviour 
 {
-	public GameObject pointerPrefab;//Prafab with Arrow or another pointer
+	public GameObject pointerPrefab;//Prefab with Arrow or another Pointer
 	private bool showPointer = false;
 
-	// Use this for initialization
 	void Start () 
 	{
 		if (pointerPrefab != null)//Works if anything is set as Pointer
@@ -20,7 +19,6 @@ public class ShowAPointer : MonoBehaviour
 		}
 	}
 	
-	// Update is called once per frame
 	void FixedUpdate () 
 	{
 		if (showPointer == true) 
@@ -41,7 +39,7 @@ public class ShowAPointer : MonoBehaviour
 	}
 	void Contact()
 	{				
-		showPointer = true;//Pointer is shown (until next platform - is purpose)
+		showPointer = true;//Pointer is shown (next step - is to show only one pointer at same time. Maybe via Pointer.script)
 	}
 
 }
