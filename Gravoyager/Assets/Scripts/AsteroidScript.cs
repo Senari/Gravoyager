@@ -25,7 +25,7 @@ public class AsteroidScript : MonoBehaviour {
 	
 
 
-        for (int i = 0; i < amount; ++i)
+        for (int i = 0; i < amount; i++)
         {
 			if (laskuri >= length) {
 
@@ -41,7 +41,7 @@ public class AsteroidScript : MonoBehaviour {
             newAsteroid.GetComponent<Rigidbody2D>().velocity = Random.insideUnitCircle * movementSpeed;
              //newAsteroid.GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * rotationSpeed;
 
-			laskuri++;
+			laskuri = laskuri + 2;
 
         }
     }
