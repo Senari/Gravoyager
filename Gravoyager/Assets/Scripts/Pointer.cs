@@ -2,6 +2,8 @@
 using UnityEngine.UI; // THIS NEEDED FOR DISPLAYING TEXTS
 using System.Collections;
 
+//POINTER - to MainCamera
+//DISTANCE - to TimerCanvas
 public class Pointer : MonoBehaviour {
 
     public Transform target;
