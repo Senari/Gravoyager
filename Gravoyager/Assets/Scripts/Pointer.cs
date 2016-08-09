@@ -34,7 +34,7 @@ public class Pointer : MonoBehaviour {
 			{
 				distanceToTarget.text = null;
 				//Maybe destroy whole pointer as well
-				Destroy(this);
+				Destroy(this.gameObject); // You forgot the .gameObject, wich destroys the whole object, not just part of it
 			}
 
 		}
