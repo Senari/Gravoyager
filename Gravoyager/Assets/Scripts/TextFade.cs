@@ -5,16 +5,16 @@ using System.Collections;
 public class TextFade : MonoBehaviour {
     public Text infoText;
     public float fadeSpeed = 5f;
-    public bool start;
+    public bool start = false;
     public GameObject DialogCanvas;
     // Use this for initialization
 
-        void Awake()
-
+    void Awake()
     {
         infoText = DialogCanvas.GetComponentInChildren<Text> ();
 
-       infoText.color = Color.clear;  //no color at start
+        infoText.color = Color.clear;  //no color at start
+
     }
 
 
@@ -30,12 +30,12 @@ public class TextFade : MonoBehaviour {
 
 	}
 
-    void onTriggerEnter2D(Collider2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Trigger")
+        if (col.gameObject.tag == "Player")
         {
 
-           start = true;
+            start = true;
             Debug.Log("Something has entered this zone.");
            
         }
@@ -43,13 +43,10 @@ public class TextFade : MonoBehaviour {
     }
 
 
-    void onTriggerExit2D(Collider2D col)
+    void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Trigger")
+        if (col.gameObject.tag == "Player")
         {
-
-           
-
 
             start = false;
         }
@@ -62,7 +59,7 @@ public class TextFade : MonoBehaviour {
 
         {
             infoText.color = Color.Lerp(infoText.color, Color.white, fadeSpeed * Time.deltaTime);
-
+            print("asdsa");
 
         }
 
