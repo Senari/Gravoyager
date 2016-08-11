@@ -24,15 +24,30 @@ public class narrativeScript : MonoBehaviour
     }
 
 
-    public void Startlevel2()
+    public void Startlevel2info()
     {
         Application.LoadLevel(6);
     }
-    public void Startlevel3()
+    public void Startlevel2()
     {
         Application.LoadLevel(7);
     }
-
+    public void Startlevel3info()
+    {
+        Application.LoadLevel(8);
+    }
+    public void Startlevel3()
+    {
+        Application.LoadLevel(9);
+    }
+    public void Startlevel4info()
+    {
+        Application.LoadLevel(10);
+    }
+    public void Startlevel4()
+    {
+        Application.LoadLevel(11);
+    }
 
     public void ExitGame()
 

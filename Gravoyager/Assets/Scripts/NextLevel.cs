@@ -3,7 +3,7 @@ using System.Collections;
 
 public class NextLevel : MonoBehaviour {
 
-
+    public int loadLevel = 5;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +21,7 @@ public class NextLevel : MonoBehaviour {
         if (collider.gameObject.tag == "Gates")
         {
 
-            Application.LoadLevel(5);
+            Application.LoadLevel(loadLevel);
 
         }
 
