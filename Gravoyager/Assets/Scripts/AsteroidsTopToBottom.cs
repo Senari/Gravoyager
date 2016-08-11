@@ -40,11 +40,11 @@ public class AsteroidsTopToBottom : MonoBehaviour {
 			newAsteroid.transform.localScale = Vector3.one * size;
 			// if the asteroid has a rigidbody...
 			newAsteroid.GetComponent<Rigidbody2D>().velocity = Random.insideUnitCircle * movementSpeed;
-			//newAsteroid.GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * rotationSpeed;
+            //newAsteroid.GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * rotationSpeed;
 
-			laskuri++;
+            laskuri = laskuri + 4;
 
-		}
+        }
 	}
 
 	// Update is called once per frame

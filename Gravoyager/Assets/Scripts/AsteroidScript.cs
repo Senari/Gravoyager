@@ -41,7 +41,7 @@ public class AsteroidScript : MonoBehaviour {
             newAsteroid.GetComponent<Rigidbody2D>().velocity = Random.insideUnitCircle * movementSpeed;
              //newAsteroid.GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * rotationSpeed;
 
-			laskuri = laskuri + 2;
+			laskuri = laskuri + 4;
 
         }
     }
