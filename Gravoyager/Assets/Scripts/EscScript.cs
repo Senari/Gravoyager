@@ -10,6 +10,8 @@ public class EscScript : MonoBehaviour
 
     public Button jatka;
 
+    public int level = 3;
+
     // Use this for initialization
     void Start()
     {
@@ -25,28 +27,14 @@ public class EscScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
 
-
-            if (Time.timeScale == 0)
-            {
-
-
-                Time.timeScale = 1;
-            }
-            else {
-
-                Time.timeScale = 0;
-
-            }
-
-
-
+            Application.LoadLevel(0);
 
         }
 
         if (Input.GetKey(KeyCode.R))
         {
 
-            Application.LoadLevel(3);
+            Application.LoadLevel(level);
         }
 
     }
